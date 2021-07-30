@@ -1,0 +1,314 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: transparent; /* For some Androids */
+  user-select: none;
+
+  &:active, &:focus {
+    outline: none;
+  }
+}
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+  background: transparent; /* Hides the slider so custom styles can be added */
+  border-color: transparent;
+  color: transparent;
+}
+
+body {
+  background: linear-gradient(18deg, rgba(29,27,32,1) 0%, rgba(97,61,143,1) 35%, rgba(120,81,169,1) 100%);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.keyboard {
+  width: 90vw;
+  padding-bottom: 35vw;
+  margin: 25px auto;
+  background: #5f5f5f;
+  position: relative;
+  box-shadow: 5px 5px 0px #2f2f2f;
+  
+  > .top {
+    position: absolute;
+    height: 13vw;
+    top: 0;
+    width: 100%;
+    left: 0;
+    border-bottom: 2px solid darken(#7851a9, 15%);
+    
+    .display {
+      height: 10vw;
+      width: 15vw;
+      background: black;
+      position: absolute;
+      left: 10%;
+      top: 1.5vw;
+      
+      canvas {
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+    .types {
+      width: 15vw;
+      left: 30vw;
+      top: 1.5vw;
+      position: absolute;
+      background: #4f4f4f;
+      padding: 10px;
+    
+      .type {
+        background: #5f5f5f;
+        margin-bottom: 10px;
+        box-shadow: 3px 3px 0px #2f2f2f;
+        padding-left: 25px;
+        position: relative;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &::before {
+          content: '';
+          display: block;
+          position: absolute;
+          left: 5px;
+          top: 4px;
+          height: 10px;
+          width: 10px;
+          background: #2f2f2f;
+        }
+
+        &.pressed {
+          background: #555555;
+          box-shadow: 2px 2px 0px #2f2f2f;
+
+          &::before {
+            background: #7851a9;
+          }
+        }
+      }
+    }
+    
+    .effects {
+      width: 15vw;
+      left: calc(45vw + 25px);
+      top: 1.5vw;
+      position: absolute;
+      background: #4f4f4f;
+      padding: 10px;
+    
+      .effect {
+        background: #5f5f5f;
+        margin-bottom: 10px;
+        box-shadow: 3px 3px 0px #2f2f2f;
+        padding-left: 25px;
+        position: relative;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &::before {
+          content: '';
+          display: block;
+          position: absolute;
+          left: 5px;
+          top: 4px;
+          height: 10px;
+          width: 10px;
+          background: #2f2f2f;
+        }
+
+        &.pressed {
+          background: #555555;
+          box-shadow: 2px 2px 0px #2f2f2f;
+
+          &::before {
+            background: #7851a9;
+          }
+        }
+      }
+    }
+    
+    .name {
+      position: absolute;
+      top: 1.5vw;
+      right: 1.5vw;
+      font-size: 2.5vw;
+      font-style: italic;
+      color: white;
+      text-shadow: -1px -1px #667043;
+    }
+    
+    .label {
+      position: absolute;
+      top: 5.5vw;
+      right: 1.5vw;
+      width: 15vw;
+      font-size: 1vw;
+      color: #1f1f1f;
+      text-align: center;
+    }
+    
+    .volume {
+      position: absolute;
+      top: 7vw;
+      right: 1.5vw;
+      width: 15vw;
+      height: 2.5vw;
+      background: #4f4f4f;
+      
+      input[type=range] {
+        width: 90%;
+        background: #2f2f2f;
+        position: absolute;
+        top: 0.85vw;
+        left: 5%;
+      }
+      
+      input[type=range]::-webkit-slider-thumb {
+        background: #7851a9;
+        height: 1vw;
+        width: 1vw;
+        cursor: pointer;
+      }
+    }
+  }
+  
+  .bottom {
+    position: absolute;
+    height: 22vw;
+    width: 100%;
+    bottom: 0;
+    background: #4f4f4f;
+  }
+  
+  .keys {
+    width: 80%;
+    height: 20vw;
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    display: flex;
+    
+    .key {
+      flex: 1;
+      // display: inline-block;
+      // width: 8.33%;
+      display: flex;
+      justify-content: flex-end;
+      flex-direction: column;;
+      height: 100%;
+      text-align: center;
+      // line-height: 30vw;
+      background: white;
+      border-right: 2px solid #5f5f5f;
+      border-bottom: 2px solid #5f5f5f;
+      
+      // font-size: 4vw;
+      
+      
+      &:hover {
+        cursor: pointer;
+      }
+      
+      &.pressed {
+        background: #9f9f9f;
+      }
+
+      &.sharp {
+        background: #2f2f2f;
+        color: white;
+        
+        &.pressed {
+          background: black;
+        }
+      }
+
+      &.blank {
+        border: none;
+        pointer-events: none;
+        background: transparent;
+      }
+    }
+
+    &.sharps {
+      height: 10vw;
+      bottom: 10vw;
+    }
+  }
+  
+  .octave-switch {
+    position: absolute;
+    bottom: 2vw;
+    right: 0;
+    width: 10%;
+    text-align: center;
+    
+    .label {
+      font-size: 1vw;
+      color: #1f1f1f;
+    }
+    
+    > div {
+      width: 40%;
+      margin: 5%;
+      float: left;
+      color: white;
+      background: #3f3f3f;
+      font-size: 2vw;
+      
+      &.pressed {
+        background: #2f2f2f;
+      }
+      
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.message {
+  margin-top: 100px;
+}
+
+.message, .tagline {
+  color: white;
+  text-align: center;
+  font-weight: 300;
+  font-size: 4vw;
+  margin-bottom: 10px;
+}
+
+.tagline {
+  margin: 0;
+  font-size: 2vw;
+}
+
+.doit {
+  color: white;
+  text-align: center;
+  font-weight: 300;
+}
