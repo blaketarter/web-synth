@@ -88,7 +88,7 @@ export function App() {
   const reverbEffect = useRef(new Tone.Reverb())
   const distortionEffect = useRef(new Tone.Distortion(0.2))
   const chorusEffect = useRef(new Tone.Chorus(4, 2.5, 0.5))
-  const [volume, setVolume] = useState(0)
+  const [volume, setVolume] = useState(-10)
   const activeKeysRef = useRef<{ [note: string]: boolean }>({})
   const keysRef = useRef(
     octaves
@@ -99,6 +99,58 @@ export function App() {
   const [reverb, setReverb] = useState(false)
   const [distortion, setDistortion] = useState(false)
   const [chorus, setChorus] = useState(false)
+
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+
+  useEffect(() => {
+    console.log(canvasRef.current)
+    const canvasCtx = canvasRef.current?.getContext("2d")
+    const HEIGHT = canvasRef.current?.height
+    const WIDTH = canvasRef.current?.width
+    console.log({ HEIGHT, WIDTH })
+
+    const bufferLength = 1024
+    if (canvasCtx) {
+      canvasCtx.fillStyle = "#1f1f1f" // draw wave with canvas
+      canvasCtx.lineWidth = 2
+      canvasCtx.strokeStyle = "#7851a9"
+    }
+    const sliceWidth = ((WIDTH ?? 0) * 1.0) / bufferLength
+
+    canvasCtx?.clearRect(0, 0, WIDTH ?? 0, HEIGHT ?? 0)
+
+    const toneWaveform = new Tone.Waveform()
+    Tone.Destination.connect(toneWaveform)
+
+    const draw = () => {
+      if (canvasCtx) {
+        const dataArray = toneWaveform.getValue()
+        canvasCtx.fillRect(0, 0, WIDTH ?? 0, HEIGHT ?? 0)
+        canvasCtx?.beginPath()
+
+        let x = 0
+
+        for (let i = 0; i < bufferLength; i++) {
+          const v = dataArray[i] * 2
+          const y = (v * (HEIGHT ?? 0)) / 2 + (HEIGHT ?? 0) / 2
+
+          if (i === 0) {
+            canvasCtx?.moveTo(x, y)
+          } else {
+            canvasCtx?.lineTo(x, y)
+          }
+
+          x += sliceWidth
+        }
+
+        canvasCtx?.stroke()
+      }
+
+      requestAnimationFrame(draw)
+    }
+
+    draw()
+  }, [canvasRef.current])
 
   useEffect(() => {
     ;(navigator as any).requestMIDIAccess().then((access: any) => {
@@ -159,7 +211,7 @@ export function App() {
   }, [distortion, reverb, chorus])
 
   useEffect(() => {
-    if (volume > -10) {
+    if (volume > -20) {
       synth.current.volume.value = volume
     } else {
       synth.current.volume.value = synth.current.volume.minValue
@@ -243,6 +295,9 @@ export function App() {
     <div className="App">
       <div className="keyboard">
         <div className="top">
+          <div className="visualization">
+            <canvas id="canvas" ref={canvasRef} />
+          </div>
           <div className="types">
             <div
               className={`type ${type === "sine" ? "pressed" : ""}`}
@@ -290,7 +345,7 @@ export function App() {
               className="slider"
               type="range"
               value={volume}
-              min="-10"
+              min="-20"
               max="0"
               onChange={(e) => {
                 setVolume(parseInt(e.target.value))
